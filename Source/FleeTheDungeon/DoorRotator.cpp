@@ -2,6 +2,7 @@
 
 
 #include "DoorRotator.h"
+#include "Math/UnrealMathUtility.h"
 
 // Sets default values for this component's properties
 UDoorRotator::UDoorRotator()
@@ -36,11 +37,13 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 }
 
 void UDoorRotator::RotateDoor(float DeltaTime) {
-	if (!ShouldMove) {
+	if (ShouldMove) {
+		TargetRotation = StartRotation + MoveOffset;
+	}
+	else {
 		TargetRotation = StartRotation;
 	}
 
-	FVector CurrLocation = GetOwner()->GetActorLocation();
 	FRotator CurrRotation = GetOwner()->GetActorRotation();
 
 	if (TargetRotation.Equals(CurrRotation)) return;
@@ -48,4 +51,15 @@ void UDoorRotator::RotateDoor(float DeltaTime) {
 	float MoveSpeed = MoveOffset.Yaw / MoveTime;
 	FRotator NewRotation = FMath::RInterpConstantTo(CurrRotation, TargetRotation, DeltaTime, MoveSpeed);
 	GetOwner()->SetActorRotation(NewRotation);
+}
+
+
+bool UDoorRotator::GetShouldMove()
+{
+	return ShouldMove;
+}
+
+void UDoorRotator::SetShouldMove(bool bVal)
+{
+	ShouldMove = bVal;
 }

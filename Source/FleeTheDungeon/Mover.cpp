@@ -23,9 +23,7 @@ void UMover::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* MyOwner = GetOwner();
-
-	StartLocation = MyOwner->GetActorLocation();
+	StartLocation = GetOwner()->GetActorLocation();
 
 	TargetLocation = StartLocation + MoveOffset;
 }
@@ -50,14 +48,17 @@ void UMover::SetShouldMove(bool bVal)
 }
 
 void UMover::Move(float DeltaTime) {
-	if (!ShouldMove) {
+	if (ShouldMove) {
+		TargetLocation = StartLocation + MoveOffset;
+	}
+	else {
 		TargetLocation = StartLocation;
 	}
 	FVector CurrLocation = GetOwner()->GetActorLocation();
-	if (TargetLocation.Equals(CurrLocation)) return;
 
+	if (TargetLocation.Equals(CurrLocation)) return;
 
 	float MoveSpeed = MoveOffset.Length() / MoveTime;
 	FVector NewLocation = FMath::VInterpConstantTo(CurrLocation, TargetLocation, DeltaTime, MoveSpeed);
-	GetOwner()->SetActorLocation(CurrLocation);
+	GetOwner()->SetActorLocation(NewLocation);
 }

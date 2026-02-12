@@ -23,6 +23,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	bool GetShouldMove();
+	void SetShouldMove(bool bVal);
 
 private:
 	FRotator StartRotation;
