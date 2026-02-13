@@ -17,9 +17,11 @@ void UTriggerComponent::BeginPlay()
 		Rotator = MoverActor->FindComponentByClass<UDoorRotator>();
 		if (Mover) {
 			UE_LOG(LogTemp, Display, TEXT("Succesfully found Mover Component"));
+		} else if (Rotator) {
+			UE_LOG(LogTemp, Display, TEXT("Succesfully found Rotator Component"));
 		}
 		else {
-			UE_LOG(LogTemp, Display, TEXT("Failed to find Mover Component"));
+			UE_LOG(LogTemp, Display, TEXT("Failed to find Mover or Rotator Component"));
 		}
 	}
 	else {
@@ -40,30 +42,35 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 void UTriggerComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (Mover) {
-		Mover->SetShouldMove(true);
-		UE_LOG(LogTemp, Display, TEXT("Should move is now true"));
-	}
-	else if (Rotator) {
-		Rotator->SetShouldMove(true);
-		UE_LOG(LogTemp, Display, TEXT("Should move is now true"));
-	}
-	else {
-		UE_LOG(LogTemp, Display, TEXT("Should move was not set to true"));
+	if(!IsTriggered) {
+		Trigger(true, OtherActor);
 	}
 }
 
 void UTriggerComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (Mover) {
-		Mover->SetShouldMove(false);
-		UE_LOG(LogTemp, Display, TEXT("Should move is now false"));
+	if (IsTriggered) {
+		Trigger(false, OtherActor);
 	}
-	else if (Rotator) {
-		Rotator->SetShouldMove(false);
-		UE_LOG(LogTemp, Display, TEXT("Should move is now true"));
+}
+
+void UTriggerComponent::Trigger(bool NewTriggerValue, AActor* OtherActor)
+{
+	if (OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
+		Trigger(NewTriggerValue);
 	}
-	else {
-		UE_LOG(LogTemp, Display, TEXT("Should move was not set to false"));
-	}
+}
+
+void UTriggerComponent::Trigger(bool NewTriggerValue)
+{
+		if (Mover) {
+			Mover->SetShouldMove(NewTriggerValue);
+		}
+		else if (Rotator) {
+			Rotator->SetShouldMove(NewTriggerValue);
+		}
+		else {
+			UE_LOG(LogTemp, Display, TEXT("%s doesn't have a mover to trigger!"), *GetOwner()->GetActorNameOrLabel());
+		}
+		IsTriggered = NewTriggerValue;
 }

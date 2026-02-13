@@ -22,7 +22,7 @@ void UDoorRotator::BeginPlay()
 
 	StartRotation = GetOwner()->GetActorRotation();
 	
-	TargetRotation = StartRotation + MoveOffset;
+	SetShouldMove(false);
 	
 }
 
@@ -37,13 +37,6 @@ void UDoorRotator::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 }
 
 void UDoorRotator::RotateDoor(float DeltaTime) {
-	if (ShouldMove) {
-		TargetRotation = StartRotation + MoveOffset;
-	}
-	else {
-		TargetRotation = StartRotation;
-	}
-
 	FRotator CurrRotation = GetOwner()->GetActorRotation();
 
 	if (TargetRotation.Equals(CurrRotation)) return;
@@ -62,4 +55,11 @@ bool UDoorRotator::GetShouldMove()
 void UDoorRotator::SetShouldMove(bool bVal)
 {
 	ShouldMove = bVal;
+
+	if (ShouldMove) {
+		TargetRotation = StartRotation + MoveOffset;
+	}
+	else {
+		TargetRotation = StartRotation;
+	}
 }

@@ -27,11 +27,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	/** called when something enters the sphere component */
+	/** called when something enters the trigger component */
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	/** called when something leaves the sphere component */
+	/** called when something leaves the trigger component */
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
@@ -39,10 +39,15 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool IsPressurePlate = false;
 
+	UPROPERTY(VisibleAnywhere)
+	bool IsTriggered;
+
 	UPROPERTY(EditAnywhere)
 	AActor* MoverActor;
 
 	UMover* Mover;
 	UDoorRotator* Rotator;
 
+	void Trigger(bool NewTriggerValue, AActor* OtherActor);
+	void Trigger(bool NewTriggerValue);
 };
