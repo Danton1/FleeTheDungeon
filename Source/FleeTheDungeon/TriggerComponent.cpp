@@ -42,22 +42,29 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 void UTriggerComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(!IsTriggered) {
-		Trigger(true, OtherActor);
-	}
+	TriggerAdd(true, OtherActor);
 }
 
 void UTriggerComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (IsTriggered) {
-		Trigger(false, OtherActor);
+	TriggerSubtract(false, OtherActor);
+}
+
+void UTriggerComponent::TriggerAdd(bool NewTriggerValue, AActor* OtherActor)
+{
+	if (!IsTriggered && OtherActor && OtherActor->ActorHasTag("PressurePlateActivator") && !ActivatorCount) {
+		Trigger(NewTriggerValue);
+		ActivatorCount++;
 	}
 }
 
-void UTriggerComponent::Trigger(bool NewTriggerValue, AActor* OtherActor)
+void UTriggerComponent::TriggerSubtract(bool NewTriggerValue, AActor* OtherActor)
 {
-	if (OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
+	if (IsTriggered && OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
+		ActivatorCount--;
+		if (ActivatorCount) return;
 		Trigger(NewTriggerValue);
+		if (ActivatorCount < 0) ActivatorCount = 0;
 	}
 }
 

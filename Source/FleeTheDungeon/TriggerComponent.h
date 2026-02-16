@@ -48,6 +48,10 @@ private:
 	UMover* Mover;
 	UDoorRotator* Rotator;
 
-	void Trigger(bool NewTriggerValue, AActor* OtherActor);
+	void TriggerAdd(bool NewTriggerValue, AActor* OtherActor);
+	void TriggerSubtract(bool NewTriggerValue, AActor* OtherActor);
 	void Trigger(bool NewTriggerValue);
+
+	UPROPERTY(VisibleAnywhere)
+	int32 ActivatorCount = 0;
 };
