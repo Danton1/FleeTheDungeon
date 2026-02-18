@@ -52,18 +52,17 @@ void UTriggerComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor
 
 void UTriggerComponent::TriggerAdd(bool NewTriggerValue, AActor* OtherActor)
 {
-	if (!IsTriggered && OtherActor && OtherActor->ActorHasTag("PressurePlateActivator") && !ActivatorCount) {
-		Trigger(NewTriggerValue);
+	if (OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
 		ActivatorCount++;
+		if(!IsTriggered) Trigger(NewTriggerValue);
 	}
 }
 
 void UTriggerComponent::TriggerSubtract(bool NewTriggerValue, AActor* OtherActor)
 {
-	if (IsTriggered && OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
+	if (OtherActor && OtherActor->ActorHasTag("PressurePlateActivator")) {
 		ActivatorCount--;
-		if (ActivatorCount) return;
-		Trigger(NewTriggerValue);
+		if(IsTriggered && !ActivatorCount) Trigger(NewTriggerValue);
 		if (ActivatorCount < 0) ActivatorCount = 0;
 	}
 }
