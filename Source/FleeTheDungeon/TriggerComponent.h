@@ -34,6 +34,7 @@ public:
 	/** called when something leaves the trigger component */
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void Trigger(bool NewTriggerValue);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -50,7 +51,7 @@ private:
 
 	void TriggerAdd(bool NewTriggerValue, AActor* OtherActor);
 	void TriggerSubtract(bool NewTriggerValue, AActor* OtherActor);
-	void Trigger(bool NewTriggerValue);
+	
 
 	UPROPERTY(VisibleAnywhere)
 	int32 ActivatorCount = 0;
