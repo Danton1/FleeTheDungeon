@@ -1,6 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "FleeTheDungeon.h"
 #include "Modules/ModuleManager.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, FleeTheDungeon, "FleeTheDungeon" );
+
+DEFINE_LOG_CATEGORY(LogFleeTheDungeon)
