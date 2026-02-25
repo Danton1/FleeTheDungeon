@@ -72,7 +72,15 @@ void AFleeTheDungeonCharacter::SetupPlayerInputComponent(UInputComponent* Player
 
 void AFleeTheDungeonCharacter::Interact()
 {
-	UE_LOG(LogTemp, Display, TEXT("Grab"));
+	FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	FVector End = Start + (FirstPersonCameraComponent->GetForwardVector() * MaxInteractionDistance);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Cyan, false, 5.0f);
+
+	FCollisionShape InteractionSphere = FCollisionShape::MakeSphere(InteractionSphereRadius);
+
+	DrawDebugSphere(GetWorld(), Start, InteractionSphereRadius, 20, FColor::Green, false, 10.0f);
+	DrawDebugSphere(GetWorld(), End, InteractionSphereRadius, 20, FColor::Green, false, 10.0f);
+	//GetWorld()->SweepSingleByChannel();
 
 }
 

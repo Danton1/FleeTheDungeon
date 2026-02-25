@@ -84,7 +84,10 @@ protected:
 
 	/** Set up input action bindings */
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	
+	UPROPERTY(EditAnywhere)
+	float MaxInteractionDistance = 300.0f;
+	UPROPERTY(EditAnywhere)
+	float InteractionSphereRadius = 30.0f;
 
 public:
 
