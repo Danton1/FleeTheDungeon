@@ -35,7 +35,7 @@ void ALock::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UE_LOG(LogTemp, Display, TEXT("%f"), GetWorld()->TimeSeconds);
+	//UE_LOG(LogTemp, Display, TEXT("%f"), GetWorld()->TimeSeconds);
 }
 
 bool ALock::GetIsKeyPlaced()
@@ -49,5 +49,10 @@ void ALock::SetIsKeyPlaced(bool bIsKeyPlaced)
 	TriggerComp->Trigger(bIsKeyPlaced);
 	KeyItemMesh->SetVisibility(bIsKeyPlaced);
 	KeyItemMesh->SetCollisionProfileName(bIsKeyPlaced ? TEXT("BlockAndInteract") : TEXT("KeyEmpty"));
+}
+
+FString ALock::GetKeyItemName()
+{
+	return KeyItemName;
 }
 

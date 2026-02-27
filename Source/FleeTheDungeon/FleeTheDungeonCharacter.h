@@ -86,8 +86,10 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	UPROPERTY(EditAnywhere)
 	float MaxInteractionDistance = 300.0f;
+
 	UPROPERTY(EditAnywhere)
 	float InteractionSphereRadius = 30.0f;
+
 
 public:
 
@@ -99,5 +101,9 @@ public:
 
 
 	void Interact();
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	TArray<FString> Inventory;
 };
 

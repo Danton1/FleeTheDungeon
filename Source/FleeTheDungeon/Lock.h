@@ -34,6 +34,8 @@ public:
 
 	void SetIsKeyPlaced(bool bIsKeyPlaced);
 
+	FString GetKeyItemName();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* RootComp;

@@ -10,6 +10,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "FleeTheDungeon.h"
 
+#include "Lock.h"
+#include "CollectableItem.h"
+
 AFleeTheDungeonCharacter::AFleeTheDungeonCharacter()
 {
 	// Set size for collision capsule
@@ -78,9 +81,48 @@ void AFleeTheDungeonCharacter::Interact()
 
 	FCollisionShape InteractionSphere = FCollisionShape::MakeSphere(InteractionSphereRadius);
 
-	DrawDebugSphere(GetWorld(), Start, InteractionSphereRadius, 20, FColor::Green, false, 10.0f);
-	DrawDebugSphere(GetWorld(), End, InteractionSphereRadius, 20, FColor::Green, false, 10.0f);
-	//GetWorld()->SweepSingleByChannel();
+	//DrawDebugSphere(GetWorld(), Start, InteractionSphereRadius, 20, FColor::Red, false, 5.0f);
+	DrawDebugSphere(GetWorld(), End, InteractionSphereRadius, 20, FColor::Red, false, 5.0f);
+
+	FHitResult HitResult;
+	bool HasHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Start, End,
+		FQuat::Identity,
+		ECC_GameTraceChannel2,
+		InteractionSphere
+	);
+
+	if (HasHit) {
+		AActor* HitActor = HitResult.GetActor();
+		if(HitActor){
+			if (HitActor->ActorHasTag("CollectableItem")) {
+				ACollectableItem* CollectableItem = Cast<ACollectableItem>(HitActor);
+				if (CollectableItem) {
+					UE_LOG(LogTemp, Display, TEXT("Collectable: %s"), *CollectableItem->GetItemName());
+					Inventory.Add(CollectableItem->GetItemName());
+					CollectableItem->Destroy();
+				}
+			}
+			else if (HitActor->ActorHasTag("Lock")) {
+				ALock* Lock = Cast<ALock>(HitActor);
+				if(Lock){
+					if (!Lock->GetIsKeyPlaced() && Inventory.Contains(Lock->GetKeyItemName())) {
+						int32 ItemsRemoved = Inventory.RemoveSingle(Lock->GetKeyItemName());
+						Lock->SetIsKeyPlaced(ItemsRemoved ? true : false);
+					}
+					else if (Lock->GetIsKeyPlaced()) {
+						Inventory.Add(Lock->GetKeyItemName());
+						Lock->SetIsKeyPlaced(false);
+					}
+				}
+			}
+		}
+		//UE_LOG(LogTemp, Display, TEXT("%s"), *HitActor->GetActorNameOrLabel());
+	}
+	else {
+		UE_LOG(LogTemp, Display, TEXT("No actor hit!"));
+	}
 
 }
 
