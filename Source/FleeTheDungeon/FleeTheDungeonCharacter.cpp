@@ -107,11 +107,11 @@ void AFleeTheDungeonCharacter::Interact()
 			else if (HitActor->ActorHasTag("Lock")) {
 				ALock* Lock = Cast<ALock>(HitActor);
 				if(Lock){
-					if (!Lock->GetIsKeyPlaced() && Inventory.Contains(Lock->GetKeyItemName())) {
+					if (!Lock->GetIsKeyPlaced()) {
 						int32 ItemsRemoved = Inventory.RemoveSingle(Lock->GetKeyItemName());
-						Lock->SetIsKeyPlaced(ItemsRemoved ? true : false);
+						if (ItemsRemoved) Lock->SetIsKeyPlaced(true);
 					}
-					else if (Lock->GetIsKeyPlaced()) {
+					else {
 						Inventory.Add(Lock->GetKeyItemName());
 						Lock->SetIsKeyPlaced(false);
 					}
