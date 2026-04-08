@@ -32,11 +32,11 @@ public:
 
 	bool GetIsKeyPlaced();
 
-	void SetIsKeyPlaced(bool bIsKeyPlaced);
+	virtual void SetIsKeyPlaced(bool bIsKeyPlaced);
 
 	FString GetKeyItemName();
 
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* RootComp;
 

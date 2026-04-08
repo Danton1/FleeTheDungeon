@@ -35,6 +35,8 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	void Trigger(bool NewTriggerValue);
+	
+	void SetIsPressurePlate(bool bIsPressurePlate);
 
 private:
 	UPROPERTY(EditAnywhere)

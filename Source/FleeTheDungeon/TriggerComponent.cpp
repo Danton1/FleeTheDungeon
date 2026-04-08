@@ -80,3 +80,18 @@ void UTriggerComponent::Trigger(bool NewTriggerValue)
 		}
 		IsTriggered = NewTriggerValue;
 }
+
+void UTriggerComponent::SetIsPressurePlate(bool bIsPressurePlate)
+{
+	if (IsPressurePlate == bIsPressurePlate) return;
+	IsPressurePlate = bIsPressurePlate;
+	if (IsPressurePlate) {
+		OnComponentBeginOverlap.AddDynamic(this, &UTriggerComponent::OnOverlapBegin);
+		OnComponentEndOverlap.AddDynamic(this, &UTriggerComponent::OnOverlapEnd);
+	}
+	else {
+		OnComponentBeginOverlap.RemoveDynamic(this, &UTriggerComponent::OnOverlapBegin);
+		OnComponentEndOverlap.RemoveDynamic(this, &UTriggerComponent::OnOverlapEnd);
+		UE_LOG(LogTemp, Display, TEXT("Disabled Trigger Component"));
+	}
+}
